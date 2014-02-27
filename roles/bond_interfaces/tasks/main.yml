@@ -3,18 +3,22 @@
   when: ohai_network.default_interface == "mgmt"
 
 - name: install bonding dependencies
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   apt: pkg={{ item }} state=installed
   with_items:
     - vim
     - ifenslave-2.6
 
 - name: ensure kernel bonding persistence
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   lineinfile: dest=/etc/modules regexp='bonding' line='bonding'
 
 - name: load kernel bonding
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   modprobe: name=bonding state=present
 
 - name: setup interfaces
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   template: src=interfaces.j2 dest=/etc/network/interfaces owner=root group=root mode=0644
 
 - name: restart networking
@@ -27,7 +31,15 @@
   delegate_to: localhost
 
 - name: flush interfaces
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   command: ip a f {{ item }}
   with_items:
     - eth0
     - eth1
+
+- name: flush interfaces
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  command: ip a f {{ item }}
+  with_items:
+    - em1
+    - em2
