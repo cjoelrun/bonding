@@ -31,7 +31,7 @@
 
 - name: setup interfaces
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
-  template: src={{ item }}.j2 dest=/etc/sysconfig/network-scripts/interfaces/{{ item }} owner=root group=root mode=0644
+  template: src={{ item }}.j2 dest=/etc/sysconfig/network-scripts/{{ item }} owner=root group=root mode=0644
   with_items:
     - ifcfg-mgmt
     - ifcfg-vmnet
@@ -47,7 +47,7 @@
   poll: 0
 
 - name: restart networking
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'ansible_distribution == 'Ubuntu'
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   service: name=network state=restarted
   async: 45
   poll: 0
