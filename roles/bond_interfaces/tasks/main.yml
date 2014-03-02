@@ -32,13 +32,7 @@
 - name: setup interfaces
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   template: src={{ item }}.j2 dest=/etc/sysconfig/network-scripts/{{ item }} owner=root group=root mode=0644
-  with_items:
-    - ifcfg-mgmt
-    - ifcfg-vmnet
-    - ifcfg-em1
-    - ifcfg-em2
-    - ifcfg-em3
-    - ifcfg-em4
+  with_items: centos_configs
 
 - name: restart networking
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
@@ -59,13 +53,17 @@
 - name: flush interfaces
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   command: ip a f {{ item }}
-  with_items:
-    - eth0
-    - eth1
+  with_items: ubuntu_interfaces
 
 - name: flush interfaces
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   command: ip a f {{ item }}
-  with_items:
-    - em1
-    - em2
+  with_items: centos_interfaces
+
+- name: Setup startup gateway ping
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  lineinfile: dest=/etc/rc.local regexp=EOF line="ping {{ gateway }}"
+
+- name: Setup startup gateway ping
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  lineinfile: dest=/etc/rc.local regexp="ping {{ gateway }}" insertbefore="exit" line="ping {{ gateway }}"

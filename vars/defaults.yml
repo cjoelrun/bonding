@@ -1,0 +1,19 @@
+centos_configs:
+  - ifcfg-mgmt
+  - ifcfg-vmnet
+  - ifcfg-em1
+  - ifcfg-em2
+
+centos_interfaces:
+  - em1
+  - em2
+  - em3
+  - em4
+
+ubuntu_interfaces:
+  - eth0
+  - eth1
+  - eth2
+  - eth3
+
+gateway: 198.101.133.1
