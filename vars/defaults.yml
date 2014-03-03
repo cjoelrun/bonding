@@ -16,4 +16,4 @@ ubuntu_interfaces:
   - eth2
   - eth3
 
-gateway: 198.101.133.1
+gateway: 10.127.101.1
