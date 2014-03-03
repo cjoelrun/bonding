@@ -34,6 +34,14 @@
   template: src={{ item }}.j2 dest=/etc/sysconfig/network-scripts/{{ item }} owner=root group=root mode=0644
   with_items: centos_configs
 
+- name: Setup startup gateway ping
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  lineinfile: dest=/etc/rc.local regexp=EOF line="ping {{ gateway }}"
+
+- name: Setup startup gateway ping
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  lineinfile: dest=/etc/rc.local regexp="ping {{ gateway }}" insertbefore="exit" line="ping {{ gateway }}"
+
 - name: restart networking
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   service: name=networking state=restarted
@@ -59,11 +67,3 @@
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   command: ip a f {{ item }}
   with_items: centos_interfaces
-
-- name: Setup startup gateway ping
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
-  lineinfile: dest=/etc/rc.local regexp=EOF line="ping {{ gateway }}"
-
-- name: Setup startup gateway ping
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-  lineinfile: dest=/etc/rc.local regexp="ping {{ gateway }}" insertbefore="exit" line="ping {{ gateway }}"
