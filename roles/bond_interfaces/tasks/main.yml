@@ -36,11 +36,11 @@
 
 - name: Setup startup gateway ping
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
-  lineinfile: dest=/etc/rc.local regexp=EOF line="ping {{ gateway }}"
+  lineinfile: dest=/etc/rc.local regexp=EOF line="ping -c 1 {{ gateway }}"
 
 - name: Setup startup gateway ping
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-  lineinfile: dest=/etc/rc.local regexp="ping {{ gateway }}" insertbefore="exit" line="ping {{ gateway }}"
+  lineinfile: dest=/etc/rc.local regexp="ping -c 1 {{ gateway }}" insertbefore="exit" line="ping -c 1 {{ gateway }}"
 
 - name: restart networking
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
