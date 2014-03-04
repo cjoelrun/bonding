@@ -50,5 +50,12 @@
   wait_for: delay=10 host={{ inventory_hostname }} port=22
   delegate_to: localhost
 
-- name: ensure connection
-  command: echo hi
+- name: flush interfaces
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  command: ip a f {{ item }}
+  with_items: ubuntu_interfaces
+
+- name: flush interfaces
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  command: ip a f {{ item }}
+  with_items: centos_interfaces
