@@ -22,6 +22,10 @@ iface eth2 inet manual
 # mgmt is configured using static network information.
 auto mgmt
 iface mgmt inet static
+    pre-up ifup eth0
+    pre-up ifup eth2
+    pre-down ifdown eth0
+    pre-down ifdown eth2
     address {{ ansible_default_ipv4.address }}
     netmask {{ netmask }}
     gateway {{ gateway }}
@@ -34,12 +38,12 @@ iface mgmt inet static
     bond-downdelay 200
     bond-updelay 200
 
-#eth1 is manually configured, and slave to the "vmnet" bonded NIC
+#eth4 is manually configured, and slave to the "vmnet" bonded NIC
 auto eth4
 iface eth4 inet manual
     bond-master vmnet
 
-#eth3 ditto, thus creating a 2-link bond.
+#eth6 ditto, thus creating a 2-link bond.
 auto eth6
 iface eth6 inet manual
     bond-master vmnet
@@ -48,6 +52,10 @@ iface eth6 inet manual
 # vmnet is configured using static network information.
 auto vmnet
 iface vmnet inet static
+    pre-up ifup eth4
+    pre-up ifup eth6
+    pre-down ifdown eth4
+    pre-down ifdown eth6
     up ip link set $IFACE up
     down ip link set $IFACE down
     bond-slaves eth4 eth6
