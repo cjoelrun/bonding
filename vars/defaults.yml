@@ -12,8 +12,9 @@ centos_interfaces:
 
 ubuntu_interfaces:
   - eth0
-  - eth1
   - eth2
-  - eth3
+  - eth4
+  - eth6
 
-gateway: 10.127.101.1
+gateway: 10.127.100.1
+netmask: 255.255.252.0
