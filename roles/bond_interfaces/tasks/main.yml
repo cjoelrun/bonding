@@ -50,5 +50,5 @@
   wait_for: delay=10 host={{ inventory_hostname }} port=22
   delegate_to: localhost
 
- - name: ensure connection
-   command: echo hi
+- name: ensure connection
+  command: echo hi
