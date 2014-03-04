@@ -11,7 +11,7 @@ iface lo inet loopback
 auto eth0
 iface eth0 inet manual
     bond-master mgmt
-
+    bond-primary eth0
 
 #eth2 ditto, thus creating a 2-link bond.
 auto eth2
@@ -22,17 +22,12 @@ iface eth2 inet manual
 # mgmt is configured using static network information.
 auto mgmt
 iface mgmt inet static
-    pre-up ifup eth0
-    pre-up ifup eth2
-    pre-down ifdown eth0
-    pre-down ifdown eth2
     address {{ ansible_default_ipv4.address }}
     netmask {{ netmask }}
     gateway {{ gateway }}
     dns-nameservers 8.8.8.8 8.8.4.4
-    dns-search rcb.rackspace.com
-    bond-slaves eth0 eth2
-    # bond-slaves eth0
+    dns-search {{ dns-search }}
+    bond-slaves none
     bond-mode active-backup
     bond-miimon 100
     bond-downdelay 200
@@ -42,6 +37,7 @@ iface mgmt inet static
 auto eth4
 iface eth4 inet manual
     bond-master vmnet
+    bond-primary eth4
 
 #eth6 ditto, thus creating a 2-link bond.
 auto eth6
@@ -52,14 +48,9 @@ iface eth6 inet manual
 # vmnet is configured using static network information.
 auto vmnet
 iface vmnet inet static
-    pre-up ifup eth4
-    pre-up ifup eth6
-    pre-down ifdown eth4
-    pre-down ifdown eth6
     up ip link set $IFACE up
     down ip link set $IFACE down
-    bond-slaves eth4 eth6
-    # bond-slaves eth1
+    bond-slaves none
     bond-mode active-backup
     bond-miimon 100
     bond-downdelay 200
