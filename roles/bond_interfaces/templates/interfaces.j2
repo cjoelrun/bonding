@@ -45,7 +45,7 @@ iface eth7 inet manual
     bond-master vmnet
 
 # vmnet is the bonding NIC and can be used like any other normal NIC.
-# vmnet is configured using static network information.
+# vmnet is configured using manual network information.
 auto vmnet
 iface vmnet inet manual
     up ip link set $IFACE up
