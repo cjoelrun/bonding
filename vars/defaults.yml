@@ -17,3 +17,5 @@ ubuntu_interfaces:
   - eth3
 
 gateway: 198.101.133.1
+netmask: 255.255.255.0
+dns_search: rcb.rackspace.com
